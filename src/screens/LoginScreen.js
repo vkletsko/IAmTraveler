@@ -33,7 +33,7 @@ const loginValidationSchema = yup.object().shape({
     .required("Password is required"),
 });
 
-const LoginScreen = () => {
+const LoginScreen = ({ navigation, route }) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(true);
 
   // const handleChange = (value) => {
@@ -61,6 +61,7 @@ const LoginScreen = () => {
 
   const onSignUp = () => {
     console.log("signUp");
+    navigation.navigate("Signup", {});
   };
 
   const showButton = (
