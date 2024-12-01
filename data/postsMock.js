@@ -1,0 +1,41 @@
+export const posts = [
+  {
+    id: 1,
+    imgUrl: require("../assets/img/china-6796350_1280.jpg"),
+    title: "Ліс",
+    locationTitle: "Ivano-Frankivs'k Regiom, Ukraine",
+    locationLink: "",
+    comments: 5,
+  },
+  {
+    id: 2,
+    imgUrl: require("../assets/img/landscape-1192669_1280.jpg"),
+    title: "Красоти",
+    locationTitle: "Lviv Regiom, Ukraine",
+    locationLink: "",
+    comments: 0,
+  },
+  {
+    id: 3,
+    imgUrl: require("../assets/img/landscape-7115513_1280.jpg"),
+    title: "Річка",
+    locationTitle: "Ezgorod Regiom, Ukraine",
+    comments: 2,
+  },
+  {
+    id: 4,
+    imgUrl: require("../assets/img/meadow-7432891_1280.jpg"),
+    title: "Луга",
+    locationTitle: "Kiyv, Ukraine",
+    locationLink: "",
+    comments: 1,
+  },
+  {
+    id: 5,
+    imgUrl: require("../assets/img/nature-7897683_1280.jpg"),
+    title: "Дорога",
+    locationTitle: "Kiyv, Ukraine",
+    locationLink: "",
+    comments: 15,
+  },
+];

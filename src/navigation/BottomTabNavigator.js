@@ -1,38 +1,57 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Ionicons from '@expo/vector-icons/Ionicons'
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 import { colors } from "../../styles/global";
 
-import MapScreen from "../screens/MapScreen";
+import PostsScreen from "../screens/PostsScreen";
 import ProfileScreen from "../screens/ProfileScreen";
+import CreatePostNavigator from "../navigation/CreatePostNavigator";
 import LogoutButton from "../components/LogoutButton";
+
+import ProfileIconSvg from "../../icons/ProfileIconSvg";
+import GridIconSvg from "../../icons/GridIconSvg";
 
 const Tab = createBottomTabNavigator();
 
 const BottomTabNavigator = () => {
   return (
     <Tab.Navigator
-      initialRouteName="Profile"
+      initialRouteName="Posts"
       screenOptions={({ navigation }) => ({
         tabBarLabel: "",
-        tabBarStyle: {
-          display: "flex",
-          paddingVertical: 16,
-        },
+        tabBarStyle: styles.tabBar,
       })}
     >
       <Tab.Screen
-        name="Map"
-        component={MapScreen}
+        name="Posts"
+        component={PostsScreen}
         options={({ navigation }) => ({
-          title: "Map",
+          title: "Публікації",
           tabBarIcon: ({ focused }) => (
-            <Ionicons
-              name="map"
-              size={32}
-              color={focused ? colors.orange : "black"}
-            />
+            <GridIconSvg size={24} color={focused ? colors.orange : "black"} />
+          ),
+          headerRight: () => (
+            <LogoutButton onPress={() => console.log("log out")} />
+          ),
+          headerLeftContainerStyle: styles.headerLeftIconsPadding,
+          headerRightContainerStyle: styles.headerRightIconsPadding,
+        })}
+      />
+
+      <Tab.Screen
+        name="CreatePosts"
+        component={CreatePostNavigator}
+        options={({ navigation }) => ({
+          headerShown: false,
+          tabBarStyle: { display: "none" },
+          // headerLeft: () => <BackBtn onPress={() => navigation.goBack()} />,
+          // headerLeftContainerStyle: styles.headerLeftIconsPadding,
+          // headerRightContainerStyle: styles.headerRightIconsPadding,
+          tabBarIcon: ({ focused }) => (
+            <View style={styles.addButton}>
+              <Ionicons name="add" size={24} color={colors.white} />
+            </View>
           ),
         })}
       />
@@ -43,14 +62,11 @@ const BottomTabNavigator = () => {
         options={({ navigation }) => ({
           title: "Profile",
           headerRight: () => (
-            <LogoutButton
-              onPress={() => console.log('log out')}
-            />
+            <LogoutButton onPress={() => console.log("log out")} />
           ),
           tabBarIcon: ({ focused }) => (
-            <Ionicons
-              name="person"
-              size={32}
+            <ProfileIconSvg
+              size={24}
               color={focused ? colors.orange : "black"}
             />
           ),
@@ -61,6 +77,10 @@ const BottomTabNavigator = () => {
 };
 
 const styles = StyleSheet.create({
+  tabBar: {
+    display: "flex",
+    paddingTop: 16,
+  },
   addButton: {
     width: 70,
     height: 40,
@@ -68,6 +88,12 @@ const styles = StyleSheet.create({
     backgroundColor: colors.orange,
     alignItems: "center",
     justifyContent: "center",
+  },
+  headerRightIconsPadding: {
+    paddingRight: 16,
+  },
+  headerLeftIconsPadding: {
+    paddingLeft: 16,
   },
 });
 

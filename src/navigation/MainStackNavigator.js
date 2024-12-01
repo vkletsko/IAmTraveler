@@ -7,7 +7,7 @@ import RegistrationScreen from "../screens/RegistrationScreen";
 const Stack = createStackNavigator();
 
 const MainStackNavigator = () => {
-  const isLoggedIn = false;
+  const isLoggedIn = true;
 
   return (
     <Stack.Navigator

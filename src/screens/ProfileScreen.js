@@ -1,10 +1,14 @@
 import { useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  TextInput,
+} from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 import { colors } from "../../styles/global";
-
-import Input from "../components/CustomInput";
 
 const ProfileScreen = () => {
   const [userName, setUserName] = useState("");
@@ -27,7 +31,8 @@ const ProfileScreen = () => {
         <Text>Anonim</Text>
       </View>
 
-      <CustomInput
+      <TextInput
+        name="userName"
         value={userName}
         onBlur={onUserNameChange}
         outerStyles={{ width: "60%" }}
