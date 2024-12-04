@@ -3,6 +3,8 @@ import { createStackNavigator } from "@react-navigation/stack";
 import LoginScreen from "../screens/LoginScreen";
 import BottomTabNavigator from "./BottomTabNavigator";
 import RegistrationScreen from "../screens/RegistrationScreen";
+import MapScreen from "../screens/MapScreen";
+import BackBtn from "../components/BackBtn";
 
 const Stack = createStackNavigator();
 
@@ -11,16 +13,13 @@ const MainStackNavigator = () => {
 
   return (
     <Stack.Navigator
-      // initialRouteName=""
-      screenOptions={{
+      screenOptions={() => ({
         headerShown: false,
-      }}
+      })}
     >
       {isLoggedIn ? (
-        // Якщо користувач залогінений, показуємо головний екран
         <Stack.Screen name="Home" component={BottomTabNavigator} />
       ) : (
-        // Якщо користувач не залогінений, показуємо екрани Login та Signup
         <>
           <Stack.Screen
             name="Signin"

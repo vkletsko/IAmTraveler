@@ -1,22 +1,45 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import CommentIconSvg from "../../icons/CommentIconSvg";
 import LocationIconSvg from "../../icons/LocationIconSvg";
+import LikeIconSvg from "../../icons/LikeIconSvg";
 import { colors } from "../../styles/global";
 
-const PostCard = ({ item }) => {
+const PostCard = ({
+  item,
+  onCommentsNavigate,
+  onMapNavigate,
+  isProfileView = false,
+}) => {
   return (
     <View style={styles.card}>
       <Image source={item.imgUrl} style={styles.image} />
       <Text style={styles.title}>{item.title}</Text>
       <View style={styles.desc}>
-        <View style={{ flexDirection: "row" }}>
-          <CommentIconSvg />
+        <TouchableOpacity
+          style={{ flexDirection: "row" }}
+          onPress={() =>
+            onCommentsNavigate(item, isProfileView ? "Profile" : "Post")
+          }
+        >
+          <CommentIconSvg isProfileView={isProfileView} />
           <Text style={styles.comments}>{item.comments}</Text>
-        </View>
-        <View style={{ flexDirection: "row" }}>
+          {isProfileView && (
+            <>
+              <LikeIconSvg />
+              <Text style={styles.comments}>{likes}</Text>
+            </>
+          )}
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={{ flexDirection: "row" }}
+          onPress={() =>
+            onMapNavigate(item, isProfileView ? "Profile" : "Posts")
+          }
+        >
           <LocationIconSvg />
           <Text style={styles.location}>{item.locationTitle}</Text>
-        </View>
+        </TouchableOpacity>
       </View>
     </View>
   );

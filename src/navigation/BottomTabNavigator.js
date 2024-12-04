@@ -4,9 +4,9 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 
 import { colors } from "../../styles/global";
 
-import PostsScreen from "../screens/PostsScreen";
-import ProfileScreen from "../screens/ProfileScreen";
 import CreatePostNavigator from "../navigation/CreatePostNavigator";
+import PostsListNavigator from "../navigation/PostsListNavigator";
+
 import LogoutButton from "../components/LogoutButton";
 
 import ProfileIconSvg from "../../icons/ProfileIconSvg";
@@ -14,53 +14,48 @@ import GridIconSvg from "../../icons/GridIconSvg";
 
 const Tab = createBottomTabNavigator();
 
-const BottomTabNavigator = () => {
+const BottomTabNavigator = ({ parentNavigation }) => {
   return (
     <Tab.Navigator
-      initialRouteName="Posts"
-      screenOptions={({ navigation }) => ({
+      initialRouteName="PostsListNavigator"
+      screenOptions={() => ({
         tabBarLabel: "",
         tabBarStyle: styles.tabBar,
       })}
     >
       <Tab.Screen
-        name="Posts"
-        component={PostsScreen}
-        options={({ navigation }) => ({
-          title: "Публікації",
+        name="PostsListNavigator"
+        options={() => ({
+          headerShown: false,
           tabBarIcon: ({ focused }) => (
             <GridIconSvg size={24} color={focused ? colors.orange : "black"} />
           ),
-          headerRight: () => (
-            <LogoutButton onPress={() => console.log("log out")} />
-          ),
-          headerLeftContainerStyle: styles.headerLeftIconsPadding,
-          headerRightContainerStyle: styles.headerRightIconsPadding,
         })}
-      />
+      >
+        {(props) => (
+          <PostsListNavigator {...props} parentNavigation={parentNavigation} />
+        )}
+      </Tab.Screen>
 
       <Tab.Screen
         name="CreatePosts"
-        component={CreatePostNavigator}
-        options={({ navigation }) => ({
+        options={() => ({
           headerShown: false,
           tabBarStyle: { display: "none" },
-          // headerLeft: () => <BackBtn onPress={() => navigation.goBack()} />,
-          // headerLeftContainerStyle: styles.headerLeftIconsPadding,
-          // headerRightContainerStyle: styles.headerRightIconsPadding,
           tabBarIcon: ({ focused }) => (
             <View style={styles.addButton}>
               <Ionicons name="add" size={24} color={colors.white} />
             </View>
           ),
         })}
-      />
+      >
+        {(props) => <CreatePostNavigator parentNavigation={props.navigation} />}
+      </Tab.Screen>
 
       <Tab.Screen
         name="Profile"
-        component={ProfileScreen}
         options={({ navigation }) => ({
-          title: "Profile",
+          title: "Профіль",
           headerRight: () => (
             <LogoutButton onPress={() => console.log("log out")} />
           ),
@@ -71,7 +66,9 @@ const BottomTabNavigator = () => {
             />
           ),
         })}
-      />
+      >
+        {(props) => <ProfileNavigator parentNavigation={props.navigation} />}
+      </Tab.Screen>
     </Tab.Navigator>
   );
 };
