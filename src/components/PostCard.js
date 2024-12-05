@@ -21,12 +21,15 @@ const PostCard = ({
             onCommentsNavigate(item, isProfileView ? "Profile" : "Post")
           }
         >
-          <CommentIconSvg isProfileView={isProfileView} />
-          <Text style={styles.comments}>{item.comments}</Text>
+          <CommentIconSvg
+            style={styles.commentsIcon}
+            isProfileView={isProfileView}
+          />
+          <Text style={styles.comments}>{item.comments.length.toString()}</Text>
           {isProfileView && (
             <>
               <LikeIconSvg />
-              <Text style={styles.comments}>{likes}</Text>
+              <Text style={styles.likes}>{likes}</Text>
             </>
           )}
         </TouchableOpacity>
@@ -86,7 +89,12 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto",
     fontSize: 16,
     marginHorizontal: 8,
-    marginBottom: 8,
+    marginBottom: 4,
+    marginTop: 4,
+  },
+  commentsIcon: {
+    color: colors.text_gray,
+    marginTop: 2,
   },
   desc: {
     flex: 1,

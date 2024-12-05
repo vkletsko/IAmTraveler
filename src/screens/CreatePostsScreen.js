@@ -13,6 +13,8 @@ import {
   KeyboardAvoidingView,
   Dimensions,
 } from "react-native";
+import uuid from "react-native-uuid";
+import { CameraView, CameraType, useCameraPermissions } from "expo-camera";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { colors } from "../../styles/global";
 import LocationIconSvg from "../../icons/LocationIconSvg";
@@ -22,30 +24,79 @@ import Button from "../components/Button";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("screen");
 
-const CreatePostsScreen = () => {
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [title, setTitle] = useState("");
-  const [location, setLocation] = useState("");
+const CreatePostsScreen = ({ navigation }) => {
+  const [inputs, setInputs] = useState({
+    title: "",
+    location: "",
+  });
 
-  const onClearData = () => {
-    setSelectedImage("");
-    setTitle("");
-    setLocation("");
-  };
+  const [photoUrl, setPhotoUrl] = useState("");
+  const [geoLocation, setGeoLocation] = useState(null);
 
-  const navigateToCameraScreen = () => {
-    console.log("navigateToCameraScreen");
-  };
-
-  const handleInputChange = (name, value) => {
+  const onInputChange = (name, value) => {
     setInputs((prev) => ({ ...prev, [name]: value }));
   };
 
-  onUploadPhoto = () => {};
+  const onTakePicture = async () => {
+    if (camera.current) {
+      const picture = await camera.current.takePictureAsync();
+      if (picture?.uri) {
+        setPhotoUrl(picture.uri);
+        await MediaLibrary.createAssetAsync(picture.uri);
+      }
+    }
+  };
 
-  onPublishPhoto = () => {};
+  const onUploadPhoto = () => {};
 
-  const isButtonDisabled = !(title.trim() && location.trim());
+  const onPublishPhoto = () => {
+    if (isButtonDisabled) {
+      alert("Please fill in all fields.");
+      return;
+    }
+    const post = {
+      id: uuid.v4(),
+      photo: photoUrl,
+      title: inputs.title,
+      comments: [],
+      likes: 0,
+      locationTitle: inputs.location,
+      geoLocationCoords: {},
+    };
+
+    navigation.navigate("PostsListNavigator", { post });
+    setInputs({ title: "", location: "" });
+    setPhotoUrl("");
+  };
+
+  const onCleanUp = () => {
+    setInputs({ title: "", location: "" });
+    setPhotoUrl("");
+  };
+
+  const isButtonDisabled = !(inputs.title.trim() && inputs.location.trim());
+
+  const [facing, setFacing] = useState("back");
+  const [permission, requestPermission] = useCameraPermissions();
+
+  if (!permission) {
+    return <View />;
+  }
+
+  if (!permission.granted) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.permissionsText}>
+          We need your permission to show the camera
+        </Text>
+        <Button onPress={requestPermission} title="grant permission" />
+      </View>
+    );
+  }
+
+  function toggleCameraFacing() {
+    setFacing((current) => (current === "back" ? "front" : "back"));
+  }
 
   return (
     <Pressable style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
@@ -53,11 +104,21 @@ const CreatePostsScreen = () => {
         <SafeAreaView style={styles.safeArea}>
           <View style={styles.container}>
             <View style={styles.photoBlock}>
+              <CameraView style={styles.camera} facing={facing}>
+                <View>
+                  <TouchableOpacity
+                    onPress={onTakePicture}
+                    style={styles.photoIcon}
+                  >
+                    <PhotoIconSvg />
+                  </TouchableOpacity>
+                </View>
+              </CameraView>
               <TouchableOpacity
-                onPress={navigateToCameraScreen}
-                style={styles.photoIcon}
+                style={styles.button}
+                onPress={toggleCameraFacing}
               >
-                <PhotoIconSvg />
+                <Ionicons name="refresh" color={colors.text_gray} size={24} />
               </TouchableOpacity>
             </View>
             <TouchableOpacity onPress={onUploadPhoto}>
@@ -65,8 +126,8 @@ const CreatePostsScreen = () => {
             </TouchableOpacity>
             <TextInput
               style={styles.input}
-              value={title}
-              onChangeText={(value) => handleInputChange("title", value)}
+              value={inputs.title}
+              onChangeText={(value) => onInputChange("title", value)}
               placeholder="Назва..."
               placeholderTextColor={colors.text_gray}
               keyboardType="default"
@@ -75,13 +136,12 @@ const CreatePostsScreen = () => {
             <View style={styles.inputWrapper}>
               <TextInput
                 style={[styles.input, styles.location]}
-                value={location}
-                onChangeText={(value) => handleInputChange("location", value)}
+                value={inputs.location}
+                onChangeText={(value) => onInputChange("location", value)}
                 placeholder="Місцевість..."
                 placeholderTextColor={colors.text_gray}
                 keyboardType="default"
                 autoCapitalize="none"
-                editable={false}
               />
               <LocationIconSvg style={styles.icon} />
             </View>
@@ -102,7 +162,7 @@ const CreatePostsScreen = () => {
                 Опубліковати
               </Text>
             </Pressable>
-            <Button buttonStyle={styles.deleteBtn} onPress={onClearData}>
+            <Button buttonStyle={styles.deleteBtn} onPress={onCleanUp}>
               <Ionicons name="trash" color={colors.text_gray} size={24} />
             </Button>
           </View>
@@ -206,6 +266,26 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: colors.light_gray,
+  },
+  button: {
+    right: 10,
+    bottom: 10,
+    position: "absolute",
+  },
+  text: {
+    fontFamily: "Roboto-Regular",
+    fontSize: 16,
+    lineHeight: 18.75,
+  },
+  camera: {
+    // flex: 1,
+    // borderRadius: 8,
+    // overflow: "hidden",
+  },
+  permissionsText: {
+    fontFamily: "Roboto-Regular",
+    fontSize: 16,
+    lineHeight: 18.75,
   },
 });
 
