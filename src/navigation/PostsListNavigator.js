@@ -42,11 +42,6 @@ const PostsListNavigator = ({ parentNavigation }) => {
               <BackBtn
                 onPress={() => {
                   navigation.goBack();
-                  // if (source === "Profile") {
-                  //   navigation.navigate("Profile");
-                  // } else {
-                  //   navigation.navigate("Posts");
-                  // }
                 }}
               />
             );
@@ -67,11 +62,6 @@ const PostsListNavigator = ({ parentNavigation }) => {
               <BackBtn
                 onPress={() => {
                   navigation.goBack();
-                  // if (source === "Profile") {
-                  //   navigation.navigate("Profile");
-                  // } else {
-                  //   navigation.navigate("Posts");
-                  // }
                 }}
               />
             );

@@ -12,7 +12,7 @@ const PostCard = ({
 }) => {
   return (
     <View style={styles.card}>
-      <Image source={item.imgUrl} style={styles.image} />
+      <Image source={{ uri: item.imgUrl }} style={styles.image} />
       <Text style={styles.title}>{item.title}</Text>
       <View style={styles.desc}>
         <TouchableOpacity

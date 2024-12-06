@@ -3,8 +3,6 @@ import { createStackNavigator } from "@react-navigation/stack";
 import BackBtn from "../components/BackBtn";
 import CreatePostsScreen from "../screens/CreatePostsScreen";
 import CameraScreen from "../screens/CameraScreen";
-import MapScreen from "../screens/MapScreen";
-import CommentsScreen from "../screens/CommentsScreen";
 
 const Stack = createStackNavigator();
 

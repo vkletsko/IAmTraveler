@@ -19,6 +19,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { colors } from "../../styles/global";
 import LocationIconSvg from "../../icons/LocationIconSvg";
 import PhotoIconSvg from "../../icons/PhotoIconSvg";
+import * as Location from "expo-location";
 
 import Button from "../components/Button";
 
@@ -54,16 +55,30 @@ const CreatePostsScreen = ({ navigation }) => {
       alert("Please fill in all fields.");
       return;
     }
+
+    let currentLocation = null;
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        Alert.alert("Permission to access location was denied");
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      currentLocation = location;
+    })();
+
     const post = {
       id: uuid.v4(),
-      photo: photoUrl,
+      imgUrl: photoUrl,
       title: inputs.title,
       comments: [],
       likes: 0,
       locationTitle: inputs.location,
-      geoLocationCoords: {},
+      geoLocation: currentLocation,
     };
 
+    console.log("newPost: ", post);
     navigation.navigate("PostsListNavigator", { post });
     setInputs({ title: "", location: "" });
     setPhotoUrl("");
