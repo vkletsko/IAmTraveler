@@ -6,14 +6,14 @@ import CameraScreen from "../screens/CameraScreen";
 
 const Stack = createStackNavigator();
 
-const CreatePostNavigator = () => {
+const CreatePostNavigator = ({ parentNavigation }) => {
   return (
     <Stack.Navigator
       initialRouteName="CreatePost"
       screenOptions={({ navigation }) => ({
         headerRightContainerStyle: { paddingRight: 16 },
         headerLeftContainerStyle: { paddingLeft: 16 },
-        headerLeft: () => <BackBtn onPress={() => navigation.goBack(null)} />,
+        headerLeft: () => <BackBtn onPress={() => parentNavigation.goBack()} />,
       })}
     >
       <Stack.Screen
@@ -24,6 +24,7 @@ const CreatePostNavigator = () => {
           title: "Створити Публікацію",
         }}
       />
+
       <Stack.Screen name="Camera" component={CameraScreen} />
     </Stack.Navigator>
   );

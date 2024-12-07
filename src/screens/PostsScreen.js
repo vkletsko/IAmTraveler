@@ -15,6 +15,15 @@ import { posts } from "../../data/postsMock.js";
 const PostsScreen = ({ navigation, route }) => {
   const avatar_photo = require("../../assets/img/avatar.jpeg");
 
+  const navigateToComments = (item) => {
+    navigation.navigate("Comments", { item, source: "Posts" });
+  };
+
+  const navigateToMap = (item) => {
+    // console.log("parentNavigation", parentNavigation);
+    navigation.navigate("Map", { item, source: "Posts" });
+  };
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
@@ -29,7 +38,13 @@ const PostsScreen = ({ navigation, route }) => {
           style={styles.list}
           data={posts}
           keyExtractor={(item, index) => item.id + index.toString()}
-          renderItem={({ item }) => <PostCard item={item} />}
+          renderItem={({ item }) => (
+            <PostCard
+              item={item}
+              onCommentsNavigate={() => navigateToComments(item, "Posts")}
+              onMapNavigate={() => navigateToMap(item)}
+            />
+          )}
         />
       </View>
     </SafeAreaView>

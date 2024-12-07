@@ -1,22 +1,48 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import CommentIconSvg from "../../icons/CommentIconSvg";
 import LocationIconSvg from "../../icons/LocationIconSvg";
+import LikeIconSvg from "../../icons/LikeIconSvg";
 import { colors } from "../../styles/global";
 
-const PostCard = ({ item }) => {
+const PostCard = ({
+  item,
+  onCommentsNavigate,
+  onMapNavigate,
+  isProfileView = false,
+}) => {
   return (
     <View style={styles.card}>
-      <Image source={item.imgUrl} style={styles.image} />
+      <Image source={{ uri: item.imgUrl }} style={styles.image} />
       <Text style={styles.title}>{item.title}</Text>
       <View style={styles.desc}>
-        <View style={{ flexDirection: "row" }}>
-          <CommentIconSvg />
-          <Text style={styles.comments}>{item.comments}</Text>
-        </View>
-        <View style={{ flexDirection: "row" }}>
+        <TouchableOpacity
+          style={{ flexDirection: "row" }}
+          onPress={() =>
+            onCommentsNavigate(item, isProfileView ? "Profile" : "Post")
+          }
+        >
+          <CommentIconSvg
+            style={styles.commentsIcon}
+            isProfileView={isProfileView}
+          />
+          <Text style={styles.comments}>{item.comments.length.toString()}</Text>
+          {isProfileView && (
+            <>
+              <LikeIconSvg />
+              <Text style={styles.likes}>{likes}</Text>
+            </>
+          )}
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={{ flexDirection: "row" }}
+          onPress={() =>
+            onMapNavigate(item, isProfileView ? "Profile" : "Posts")
+          }
+        >
           <LocationIconSvg />
           <Text style={styles.location}>{item.locationTitle}</Text>
-        </View>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -63,7 +89,12 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto",
     fontSize: 16,
     marginHorizontal: 8,
-    marginBottom: 8,
+    marginBottom: 4,
+    marginTop: 4,
+  },
+  commentsIcon: {
+    color: colors.text_gray,
+    marginTop: 2,
   },
   desc: {
     flex: 1,
