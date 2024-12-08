@@ -45,8 +45,6 @@ const CommentsScreen = (props) => {
     </TouchableOpacity>
   );
 
-  const avatar_photo = require("../../assets/img/china-6796350_1280.jpg");
-
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>

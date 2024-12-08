@@ -4,17 +4,21 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 
 import { colors } from "../../styles/global";
 
+import ProfileIconSvg from "../../icons/ProfileIconSvg";
+import GridIconSvg from "../../icons/GridIconSvg";
+
 import CreatePostNavigator from "../navigation/CreatePostNavigator";
 import PostsListNavigator from "../navigation/PostsListNavigator";
 
 import LogoutButton from "../components/LogoutButton";
-
-import ProfileIconSvg from "../../icons/ProfileIconSvg";
-import GridIconSvg from "../../icons/GridIconSvg";
+import { logoutDB } from "../db/auth";
+import { useDispatch } from "react-redux";
 
 const Tab = createBottomTabNavigator();
 
 const BottomTabNavigator = ({ parentNavigation }) => {
+  const dispatch = useDispatch();
+
   return (
     <Tab.Navigator
       initialRouteName="PostsListNavigator"
@@ -57,7 +61,7 @@ const BottomTabNavigator = ({ parentNavigation }) => {
         options={({ navigation }) => ({
           title: "Профіль",
           headerRight: () => (
-            <LogoutButton onPress={() => console.log("log out")} />
+            <LogoutButton onPress={() => logoutDB(dispatch)} />
           ),
           tabBarIcon: ({ focused }) => (
             <ProfileIconSvg

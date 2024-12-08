@@ -1,7 +1,12 @@
-import { ActivityIndicator, StyleSheet, View } from "react-native";
+import { useEffect } from "react";
+import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import MainStackNavigator from "./src/navigation/MainStackNavigator";
+import { Provider, useDispatch } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
+import store from "./src/redux/store/store";
+import { authStateChanged } from "./src/db/auth";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -20,11 +25,30 @@ export default function App() {
   }
 
   return (
+    <Provider store={store.store}>
+      <PersistGate
+        loading={<Text>Loading...</Text>}
+        persistor={store.persistor}
+      >
+        <AuthListener />
+      </PersistGate>
+    </Provider>
+  );
+}
+
+const AuthListener = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    authStateChanged(dispatch);
+  }, [dispatch]);
+
+  return (
     <NavigationContainer>
       <MainStackNavigator />
     </NavigationContainer>
   );
-}
+};
 
 const style = StyleSheet.create({
   section: {

@@ -18,7 +18,9 @@ import {
 import { colors } from "../../styles/global";
 
 import Button from "../components/Button";
-import CustomInput from "../components/CustomInput";
+import FormInput from "../components/FormInput";
+import { loginDB } from "../db/auth";
+import { useDispatch } from "react-redux";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("screen");
 
@@ -35,32 +37,28 @@ const loginValidationSchema = yup.object().shape({
 
 const LoginScreen = ({ navigation, route }) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(true);
-
-  // const handleChange = (value) => {
-  //   console.log("handleChange: ", value);
-  // };
-
-  // const handleBlur = (value) => {
-  //   console.log("handleBlur: ", value);
-  // };
+  const dispatch = useDispatch();
 
   const onFormSubmit = (values, actions) => {
     console.log("LoginScreen onFormSubmit: ", values);
     onSignIn(values);
-
-    actions.resetForm();
   };
 
   const showPassword = () => {
     setIsPasswordVisible((prev) => !prev);
   };
 
-  const onSignIn = () => {
-    console.log("signIn");
+  const onSignIn = async (values) => {
+    console.log("LoginScreen onSignIn: ", values);
+
+    try {
+      await loginDB(values, dispatch);
+    } catch (error) {
+      console.error("Error in loginDB:", error);
+    }
   };
 
   const onSignUp = () => {
-    console.log("signUp");
     navigation.navigate("Signup", {});
   };
 
@@ -94,23 +92,21 @@ const LoginScreen = ({ navigation, route }) => {
 
                 <View style={[styles.innerContainer, styles.inputContainer]}>
                   <Field
-                    component={CustomInput}
+                    component={FormInput}
                     name="email"
                     autoFocus={true}
                     placeholder="Адреса електронної пошти"
-                    // onBlur={handleBlur('email')}
-                    // onTextChange={handleChange('email')}
                     keyboardType="email-address"
+                    autoCapitalize="none"
                   />
 
                   <Field
-                    component={CustomInput}
+                    component={FormInput}
                     name="password"
                     placeholder="Пароль"
                     rightButton={showButton}
                     outerStyles={styles.passwordButton}
-                    // onTextChange={handleChange('password')}
-                    // onBlur={handleBlur('password')}
+                    autoCapitalize="none"
                     secureTextEntry={isPasswordVisible}
                   />
                 </View>

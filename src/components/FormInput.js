@@ -3,7 +3,7 @@ import { StyleSheet, TextInput, View, Text } from "react-native";
 
 import { colors } from "../../styles/global";
 
-const CustomInput = (props) => {
+const FormInput = (props) => {
   const {
     field: { name, onBlur, onChange, value },
     form: { errors, touched, setFieldTouched },
@@ -67,4 +67,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CustomInput;
+export default FormInput;
