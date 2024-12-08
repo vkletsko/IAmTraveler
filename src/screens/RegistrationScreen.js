@@ -17,13 +17,14 @@ import {
 
 import { colors } from "../../styles/global";
 
-import CustomInput from "../components/CustomInput";
+import FormInput from "../components/FormInput";
 import Button from "../components/Button";
+import { registerDB } from "../db/auth";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("screen");
 
 const loginValidationSchema = yup.object().shape({
-  login: yup
+  displayName: yup
     .string()
     .min(4, ({ min }) => `Login must be at least ${min} characters`)
     .required("Login is Required"),
@@ -38,31 +39,30 @@ const loginValidationSchema = yup.object().shape({
 });
 
 const RegistrationScreen = ({ navigation, route }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(true);
 
   const onFormSubmit = (values, actions) => {
-    console.log("RegistrationScreen onFormSubmit: ", values);
     onSignUp(values);
-
-    actions.resetForm();
   };
 
-  const handleEmailChange = (value) => {
-    setEmail(value);
-  };
+  // const handleEmailChange = (value) => {
+  //   setEmail(value);
+  // };
 
-  const handlePasswordChange = (value) => {
-    setPassword(value);
-  };
+  // const handlePasswordChange = (value) => {
+  //   setPassword(value);
+  // };
+
+  // const handleDisplayNameChange = (value) => {
+  //   setDisplayName(value);
+  // };
 
   const showPassword = () => {
     setIsPasswordVisible((prev) => !prev);
   };
 
-  const onSignUp = () => {
-    console.log("signUp");
+  const onSignUp = (values) => {
+    registerDB(values);
   };
 
   const onSignIn = () => {
@@ -90,7 +90,7 @@ const RegistrationScreen = ({ navigation, route }) => {
           behavior={Platform.OS == "ios" ? "padding" : "height"}
         >
           <Formik
-            initialValues={{ login: "", email: "", password: "" }}
+            initialValues={{ displayName: "", email: "", password: "" }}
             onSubmit={onFormSubmit}
             validationSchema={loginValidationSchema}
           >
@@ -105,32 +105,35 @@ const RegistrationScreen = ({ navigation, route }) => {
 
                 <View style={[styles.innerContainer, styles.inputContainer]}>
                   <Field
-                    component={CustomInput}
-                    name="login"
+                    component={FormInput}
+                    name="displayName"
                     autoFocus={true}
                     placeholder="Логін"
+                    autoCapitalize="none"
                     // onBlur={handleBlur('login')}
                     // onTextChange={handleChange('login')}
                   />
 
                   <Field
-                    component={CustomInput}
+                    component={FormInput}
                     name="email"
                     placeholder="Адреса електронної пошти"
+                    autoCapitalize="none"
+                    keyboardType="email-address"
                     // onBlur={handleBlur('email')}
                     // onTextChange={handleChange('email')}
-                    keyboardType="email-address"
                   />
 
                   <Field
-                    component={CustomInput}
+                    component={FormInput}
                     name="password"
                     placeholder="Пароль"
-                    // onBlur={handleBlur('password')}
-                    // onTextChange={handleChange('password')}
                     rightButton={showButton}
                     outerStyles={styles.passwordButton}
                     secureTextEntry={isPasswordVisible}
+                    autoCapitalize="none"
+                    // onBlur={handleBlur('password')}
+                    // onTextChange={handleChange('password')}
                   />
                 </View>
 

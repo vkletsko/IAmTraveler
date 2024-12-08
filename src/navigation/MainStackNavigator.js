@@ -1,15 +1,14 @@
 import { createStackNavigator } from "@react-navigation/stack";
+import { useSelector } from "react-redux";
 
 import LoginScreen from "../screens/LoginScreen";
 import BottomTabNavigator from "./BottomTabNavigator";
 import RegistrationScreen from "../screens/RegistrationScreen";
-import MapScreen from "../screens/MapScreen";
-import BackBtn from "../components/BackBtn";
 
 const Stack = createStackNavigator();
 
 const MainStackNavigator = () => {
-  const isLoggedIn = true;
+  const user = useSelector((state) => state.user.userInfo);
 
   return (
     <Stack.Navigator
@@ -17,7 +16,7 @@ const MainStackNavigator = () => {
         headerShown: false,
       })}
     >
-      {isLoggedIn ? (
+      {user ? (
         <Stack.Screen name="Home" component={BottomTabNavigator} />
       ) : (
         <>

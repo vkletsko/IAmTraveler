@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Image,
   StyleSheet,
@@ -10,19 +10,56 @@ import {
 } from "react-native";
 
 import PostCard from "../components/PostCard";
-import { posts } from "../../data/postsMock.js";
+import { useSelector } from "react-redux";
+import { getPosts } from "../db/firestore";
+import { useFocusEffect } from "@react-navigation/native";
+
+const fetchUserPosts = async (userId) => {
+  try {
+    const posts = await getPosts(userId);
+
+    if (!Array.isArray(posts)) {
+      console.error("Posts are not found: ", posts);
+      return [];
+    }
+
+    return posts;
+  } catch (error) {
+    console.error("Error in fetchUserPosts:", error);
+    return [];
+  }
+};
 
 const PostsScreen = ({ navigation, route }) => {
+  const [posts, setPosts] = useState([]);
   const avatar_photo = require("../../assets/img/avatar.jpeg");
+
+  const user = useSelector((state) => state.user.userInfo);
 
   const navigateToComments = (item) => {
     navigation.navigate("Comments", { item, source: "Posts" });
   };
 
   const navigateToMap = (item) => {
-    // console.log("parentNavigation", parentNavigation);
     navigation.navigate("Map", { item, source: "Posts" });
   };
+
+  useEffect(() => {
+    fetchUserPosts(user.uid);
+  }, [route?.params?.comment, route?.params?.postId]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const loadPosts = async () => {
+        if (user?.uid) {
+          const userPosts = await fetchUserPosts(user.uid);
+          setPosts(userPosts);
+        }
+      };
+
+      loadPosts();
+    }, [user?.uid])
+  );
 
   return (
     <SafeAreaView style={styles.safeArea}>

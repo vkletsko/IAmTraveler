@@ -15,7 +15,7 @@
     "ios": {
       "supportsTablet": true,
       "config": {
-        "googleMapsApiKey": "AIzaSyAPJmlHozj7GgcfpBvkNCII8eE60mJM1sY"
+        "googleMapsApiKey": "AIzaSyBr1Xfg8UjP3N5CdxnnGg1jmNIN3C5HIu4"
       },
       "bundleIdentifier": "com.goitneovirsity.iamtraveler",
       "infoPlist": {
@@ -30,6 +30,11 @@
       }
     },
     "android": {
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyBr1Xfg8UjP3N5CdxnnGg1jmNIN3C5HIu4"
+        }
+      },
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
