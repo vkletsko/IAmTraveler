@@ -2,7 +2,7 @@
   "expo": {
     "name": "IAmTraveler",
     "slug": "IAmTraveler",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -32,7 +32,7 @@
     "android": {
       "config": {
         "googleMaps": {
-          "apiKey": "AIzaSyBr1Xfg8UjP3N5CdxnnGg1jmNIN3C5HIu4"
+          "apiKey": "AIzaSyBzpmtk3Yko428bkqXBU50i_8mmlA_Nlmc"
         }
       },
       "adaptiveIcon": {
@@ -40,13 +40,6 @@
         "backgroundColor": "#ffffff"
       },
       "permissions": [
-        "android.permission.CAMERA",
-        "android.permission.RECORD_AUDIO",
-        "android.permission.ACCESS_COARSE_LOCATION",
-        "android.permission.ACCESS_FINE_LOCATION",
-        "android.permission.ACCESS_BACKGROUND_LOCATION",
-        "android.permission.FOREGROUND_SERVICE",
-        "android.permission.FOREGROUND_SERVICE_LOCATION",
         "android.permission.CAMERA",
         "android.permission.RECORD_AUDIO",
         "android.permission.ACCESS_COARSE_LOCATION",
@@ -79,6 +72,11 @@
           "isAndroidBackgroundLocationEnabled": true
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "89e7abfd-b056-49b3-bbeb-2b1655a8e722"
+      }
+    }
   }
 }
